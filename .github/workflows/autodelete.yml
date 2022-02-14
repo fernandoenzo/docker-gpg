@@ -1,0 +1,23 @@
+name: Autodelete
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+
+  workflow_dispatch:
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Delete old unused container images
+        uses: snok/container-retention-policy@v1
+        with:
+          account-type: personal
+          untagged-only: true
+          image-names: gpg
+          keep-at-least: 1
+          cut-off: One second ago UTC
+          token: ${{ secrets.DELETE_PACKAGES }}
+
